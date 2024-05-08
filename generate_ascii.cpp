@@ -7,9 +7,35 @@
 using namespace cv;
 using namespace std;
 
+
+int findBiggestSize(string letters, double font_size) {
+	
+	int baseline = 0;
+
+	Size text_size;
+	int biggest_height = 0;
+	int biggest_width = 0;
+
+	for (char& c : letters) {
+		text_size = getTextSize(string(1, c), FONT_HERSHEY_PLAIN, font_size, 1, &baseline);
+		if (text_size.height > biggest_height) {
+			biggest_height = text_size.height;
+		}
+		if (text_size.width > biggest_width) {
+			biggest_width = text_size.width;
+		}
+	}
+
+	return max(biggest_height, biggest_width);
+}
+
+
 int main() {
 
 	string letters = " _.,-++:lcba!?0123456789$#@Ñ";
+	double font_size = 0.4;
+
+	cout << findBiggestSize(letters, font_size) << endl;
 
 	string img_path = "input_images\\img.png";
 	Mat input_img;
@@ -17,7 +43,7 @@ int main() {
 
 	Mat img(500, 500, CV_8UC3, Scalar(0, 0, 0));
 
-	int jump = 8;
+	int jump = findBiggestSize(letters, font_size);
 
 	cout << input_img.channels() << endl;
 
